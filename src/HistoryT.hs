@@ -12,7 +12,7 @@ import Control.Monad.Identity
 import Control.Monad.Trans
 import Control.Monad.State.Lazy
 
-newtype HistoryT s m a = HistoryT {runHistoryT' :: StateT [s] m a} deriving (Functor, Applicative, Monad)
+newtype HistoryT s m a = HistoryT {runHistoryT' :: StateT [s] m a} deriving (Functor, Applicative, Monad, MonadTrans)
 
 runHistoryT :: HistoryT s m a -> (s -> m (a, [s]))
 runHistoryT (HistoryT comp) = runStateT comp . (: [])
