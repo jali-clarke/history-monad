@@ -3,11 +3,7 @@ module Main where
 import HistoryT
 
 histInit :: History String ()
-histInit =
-    do
-        put "World!"
-        bookmark
-        put "Hello"
+histInit = put "World!" *> bookmark *> put "Hello"
 
 reverseHistory :: History String ()
 reverseHistory =
@@ -22,19 +18,12 @@ reverseHistory =
         put rts1
 
 readHistory :: History String String
-readHistory =
-    do
-        str0 <- get
-        rewind 1
-        str1 <- get
-        bookmark
-        put str0
-        return (str0 ++ str1)
+readHistory = (++) <$> get <*> remembering 1 get
 
 main :: IO ()
 main =
     do
-        let (h0, _) = runHistory (histInit >> readHistory) ""
+        let (h0, _) = runHistory (histInit *> readHistory) ""
         putStrLn h0
-        let (h1, _) = runHistory (histInit >> reverseHistory >> readHistory) ""
+        let (h1, _) = runHistory (histInit *> reverseHistory *> readHistory) ""
         putStrLn h1

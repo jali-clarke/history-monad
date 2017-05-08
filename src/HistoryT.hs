@@ -10,6 +10,7 @@ module HistoryT (
     module Control.Monad.State.Class,
 
     bookmark,
+    remembering,
     rewind
 ) where
 
@@ -35,11 +36,15 @@ instance Monad m => MonadState s (HistoryT s m) where
 bookmark :: Monad m => HistoryT s m s
 bookmark = HistoryT . state $ \ss@(s : _) -> (s, s : ss)
 
+remembering :: Monad m => Int -> HistoryT s m a -> HistoryT s m a
+remembering n (HistoryT comp) = HistoryT $
+    do
+        ss <- get
+        let len = length ss
+        put $ drop (min n (len - 1)) ss
+        a <- comp
+        modify . (++) $ take (min n (len - 1)) ss
+        return a
+
 rewind :: Monad m => Int -> HistoryT s m s
-rewind n = HistoryT . state $ \ss -> let ss' = keepOne n ss in (head ss', ss')
-    where
-        keepOne _ ss''@(_ : []) = ss''
-        keepOne n ss'' =
-            if n <= 0
-                then ss''
-                else keepOne (n - 1) (tail ss'')
+rewind n = HistoryT . state $ \ss -> let ss' = drop (min n (length ss - 1)) ss in (head ss', ss')
