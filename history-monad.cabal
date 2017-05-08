@@ -1,0 +1,32 @@
+name:                history-monad
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/githubuser/history-monad#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Jinnah Ali-Clarke
+maintainer:          jinnah.ali-clarke@outlook.com
+copyright:           2017 Jinnah Ali-Clarke
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+  default-language:    Haskell2010
+
+executable history-monad-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , history-monad
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/jali-clarke/history-monad
