@@ -5,7 +5,12 @@ module HistoryT (
     runHistoryT,
 
     History,
-    runHistory
+    runHistory,
+
+    module Control.Monad.State.Class,
+
+    bookmark,
+    rewind
 ) where
 
 import Control.Monad.Identity
