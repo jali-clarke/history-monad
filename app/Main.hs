@@ -13,7 +13,7 @@ reverseHistory :: History String ()
 reverseHistory =
     do
         str0 <- get
-        rewind
+        rewind 1
         str1 <- get
         let rts1 = reverse str1
             rts0 = reverse str0
@@ -25,7 +25,7 @@ readHistory :: History String String
 readHistory =
     do
         str0 <- get
-        rewind
+        rewind 1
         str1 <- get
         bookmark
         put str0

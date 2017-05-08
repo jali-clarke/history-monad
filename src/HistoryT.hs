@@ -35,8 +35,11 @@ instance Monad m => MonadState s (HistoryT s m) where
 bookmark :: Monad m => HistoryT s m s
 bookmark = HistoryT . state $ \ss@(s : _) -> (s, s : ss)
 
-rewind :: Monad m => HistoryT s m (Maybe s)
-rewind = HistoryT . state $ \ss ->
-    case ss of
-        (_ : []) -> (Nothing, ss)
-        (_ : ss'@(s' : _)) -> (Just s', ss')
+rewind :: Monad m => Int -> HistoryT s m s
+rewind n = HistoryT . state $ \ss -> let ss' = keepOne n ss in (head ss', ss')
+    where
+        keepOne _ ss''@(_ : []) = ss''
+        keepOne n ss'' =
+            if n <= 0
+                then ss''
+                else keepOne (n - 1) (tail ss'')
