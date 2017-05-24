@@ -3,7 +3,6 @@
 module History (
     History,
     runHistory,
-    numOps,
 
     module Control.Monad.State.Lazy
 ) where
