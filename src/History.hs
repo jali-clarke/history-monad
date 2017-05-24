@@ -1,12 +1,18 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 
 module History (
+    History,
+    runHistory,
 
+    module Control.Monad.State.Lazy
 ) where
 
-import Control.Monad.State.Lazy (MonadState(..))
+import Control.Monad.State.Lazy
 
-data History s a = History {project :: s -> a, evoStack :: [s -> s] -> [s -> s]}
+data History s a = History (s -> a) ([s -> s] -> [s -> s])
+
+runHistory :: History s a -> s -> a
+runHistory (History proj stack) = proj . foldr (.) id (stack [])
 
 instance Functor (History s) where
     fmap f (History proj stack) = History (f . proj) stack
