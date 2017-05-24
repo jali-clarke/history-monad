@@ -1,6 +1,6 @@
 module Main where
 
-import HistoryT
+import History
 
 main :: IO ()
 main = return ()
